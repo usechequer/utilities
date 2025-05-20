@@ -9,6 +9,13 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// Token is a custom defined struct that represents relevant information
+// decoded from the JWT Token
+type Token struct {
+	Subject string
+	Issuer  string
+}
+
 // AuthMiddleware is a middleware that inspects the request's authorization
 // header for the relevant token, and if it exists, checks if it is a valid
 // token issued by Carbon. If it is not, it throws an error.
@@ -32,19 +39,11 @@ func AuthMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 			return ThrowException(context, &Exception{StatusCode: http.StatusUnauthorized, Message: "Not authenticated", Error: "AUTH_004"})
 		}
 
-		// userUuid, _ := decodedToken.Claims.GetSubject()
+		subject, _ := decodedToken.Claims.GetSubject()
+		issuer, _ := decodedToken.Claims.GetIssuer()
 
-		// var user models.User
-
-		// database := GetDatabaseObject()
-
-		// result := database.Where("uuid = ?", userUuid).First(&user)
-
-		// if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-		// 	return ThrowException(context, &Exception{StatusCode: http.StatusUnauthorized, Message: "Not authenticated", Error: "AUTH_004"})
-		// }
-
-		// context.Set("user", user)
+		contextToken := Token{Subject: subject, Issuer: issuer}
+		context.Set("token", contextToken)
 
 		return next(context)
 	}
