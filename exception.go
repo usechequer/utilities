@@ -11,6 +11,6 @@ type Exception struct {
 }
 
 // ThrowException is used to return a JSON error message to the client
-func ThrowException(context echo.Context, exception *Exception) error {
-	return context.JSON(exception.StatusCode, map[string]string{"error": exception.Error, "message": exception.Message})
+func ThrowException(exception *Exception) error {
+	return echo.NewHTTPError(exception.StatusCode, map[string]string{"error": exception.Error, "message": exception.Message})
 }
