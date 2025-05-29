@@ -26,7 +26,7 @@ func AuthMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 		authHeaderSplits := strings.Split(Authorization, " ")
 
 		if len(authHeaderSplits) != 2 {
-			return ThrowException(context, &Exception{StatusCode: http.StatusUnauthorized, Message: "Not authenticated", Error: "AUTH_004"})
+			return ThrowException(&Exception{StatusCode: http.StatusUnauthorized, Message: "Not authenticated", Error: "AUTH_004"})
 		}
 
 		token := authHeaderSplits[1]
@@ -36,7 +36,7 @@ func AuthMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 		})
 
 		if err != nil || !decodedToken.Valid {
-			return ThrowException(context, &Exception{StatusCode: http.StatusUnauthorized, Message: "Not authenticated", Error: "AUTH_004"})
+			return ThrowException(&Exception{StatusCode: http.StatusUnauthorized, Message: "Not authenticated", Error: "AUTH_004"})
 		}
 
 		subject, _ := decodedToken.Claims.GetSubject()
