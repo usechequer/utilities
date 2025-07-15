@@ -13,7 +13,7 @@ type RequestValidator struct {
 	Validator *validator.Validate
 }
 
-type requestError struct {
+type RequestError struct {
 	Param   string
 	Message string
 }
@@ -34,12 +34,12 @@ func getErrorMessage(error validator.FieldError) string {
 func (requestValidator *RequestValidator) Validate(i interface{}) error {
 	if err := requestValidator.Validator.Struct(i); err != nil {
 		validationErrors := err.(validator.ValidationErrors)
-		requestErrors := make([]requestError, len(validationErrors))
+		requestErrors := make([]RequestError, len(validationErrors))
 
 		for index, error := range validationErrors {
-			requestErrors[index] = requestError{Param: error.Field(), Message: getErrorMessage(error)}
+			requestErrors[index] = RequestError{Param: error.Field(), Message: getErrorMessage(error)}
 		}
-		return echo.NewHTTPError(http.StatusBadRequest, map[string][]requestError{"errors": requestErrors})
+		return echo.NewHTTPError(http.StatusBadRequest, map[string][]RequestError{"errors": requestErrors})
 	}
 
 	return nil
