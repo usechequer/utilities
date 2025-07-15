@@ -13,6 +13,8 @@ type RequestValidator struct {
 	Validator *validator.Validate
 }
 
+// RequestError is a custom struct used to define request body errors
+// for the Chequer app
 type RequestError struct {
 	Param   string
 	Message string
